@@ -48,8 +48,8 @@ nl=$(echo $(wc -l PROCAR | awk '{print $1}')/2 | bc)
 tail -$nl PROCAR > procar.down
 head -$nl PROCAR > procar.up
 ##### Obtiene las energias para ambos espines
-grep  "energy" procar.up  | awk '{print $5}' > energias_up  #PROCAR-->$1
-grep  "energy" procar.down  | awk '{print $5}' > energias_down  #PROCAR-->$1
+grep  "energy" procar.up  | awk '{print $5}' > energias.up  #PROCAR-->$1
+grep  "energy" procar.down  | awk '{print $5}' > energias.down  #PROCAR-->$1
 
 ##### Se generan todos los archivos individuales listos para graficar ###
 
@@ -65,15 +65,19 @@ do
    grep -A $Nat "ion " procar.down  | grep " $i " | awk '{print $3}' > atomo${i}_orbitalp_down.aux
    grep -A $Nat "ion " procar.down  | grep " $i " | awk '{print $4}' > atomo${i}_orbitald_down.aux
 
-   # Desplaza el cero a la energía de Fermi
-   echo "awk '{print \$1-$EfermiUp}' atomo${i}_orbitals_up.aux " | bash > atomo${i}_orbital_s_up
-   echo "awk '{print \$1-$EfermiDown}' atomo${i}_orbitals_down.aux " | bash > atomo${i}_orbital_s_down
+   # Crea los archivos  correspondientes
+   echo "awk '{print \$1}' atomo${i}_orbitals_up.aux " | bash > atomo${i}_orbital_s_up
+   echo "awk '{print (-1.0)*\$1}' atomo${i}_orbitals_down.aux " | bash > atomo${i}_orbital_s_down
 
-   echo "awk '{print \$1-$EfermiUp}' atomo${i}_orbitalp_up.aux " | bash > atomo${i}_orbital_p_up
-   echo "awk '{print \$1-$EfermiDown}' atomo${i}_orbitalp_down.aux " | bash > atomo${i}_orbital_p_down
+   echo "awk '{print \$1}' atomo${i}_orbitalp_up.aux " | bash > atomo${i}_orbital_p_up
+   echo "awk '{print (-1.0)*\$1}' atomo${i}_orbitalp_down.aux " | bash > atomo${i}_orbital_p_down
 
-   echo "awk '{print \$1-$EfermiUp}' atomo${i}_orbitald_up.aux " | bash > atomo${i}_orbital_d_up
-   echo "awk '{print \$1-$EfermiDown}' atomo${i}_orbitald_down.aux " | bash > atomo${i}_orbital_d_down
+   echo "awk '{print \$1}' atomo${i}_orbitald_up.aux " | bash > atomo${i}_orbital_d_up
+   echo "awk '{print (-1.0)*\$1}' atomo${i}_orbitald_down.aux " | bash > atomo${i}_orbital_d_down
+
+   #Agrega la energía de Fermi
+   echo "awk '{print \$1-$EfermiUp}' energias.up " | bash > energias_up
+   echo "awk '{print \$1-$EfermiDown}' energias.down " | bash > energias_down
 
    # Junta la información con el tipo de atomo y las energías
    paste energias_up atomo${i}_orbital_s_up > atomo${i}_orbital_s_up.dat
@@ -104,9 +108,9 @@ set output '$Title.png'" > $NombreScript
 echo -n "set title \"" >> $NombreScript
 echo -n "$Title" >> $NombreScript
 echo "\" font \"Helvetica, 35\"">> $NombreScript
-echo "set xlabel 'E-E_f (eV)'  font \"Helvetica, 35\"
+echo "set xlabel 'E-E_f (eV)'  font \"Helvetica, 25\"
 set ylabel 'PDOS (Estados/eV)' font \"Helvetica, 25\"
-set xtics font \"Helvetica, 35\"
+set xtics font \"Helvetica, 25\"
 set yzeroaxis lt -1 lw 3
 set noytics " >> $NombreScript
 
@@ -137,7 +141,6 @@ do
 #                     Asigna colores                                  #
 #********************************************************************#
       color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
-echo $l $j $tipo $color
 #**************************** Spin up ************************************#
 
         echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
@@ -154,4 +157,4 @@ gnuplot $NombreScript
 rm energias_up energias_down elementos procar.down procar.up poscar.xyz
 
 echo "Se utilizaron los siguientes colores"
-#cat colores
+cat colores

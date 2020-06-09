@@ -136,7 +136,7 @@ do
 #*********************************************************************#
 #                     Asigna colores                                  #
 #********************************************************************#
-      color=$(grep "$tipo" colores | grep "$j" | awk '{print $2}')
+      color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
 echo $l $j $tipo $color
 #**************************** Spin up ************************************#
 
@@ -151,7 +151,7 @@ echo $l $j $tipo $color
    done
 done 2>/dev/null
 gnuplot $NombreScript
-rm energias elementos procar.down procar.up poscar.xyz
+rm energias_up energias_down elementos procar.down procar.up poscar.xyz
 
 echo "Se utilizaron los siguientes colores"
-cat colores
+#cat colores

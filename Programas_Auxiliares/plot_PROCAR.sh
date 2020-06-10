@@ -102,6 +102,8 @@ done
 #***********************************************************************#
 #                      ESCRIBE SCRIPTS PARA GNUPLOT                     #
 #***********************************************************************#
+echo "Se grafica lo siguiente con los colores indicados "
+echo "Atomo  Orbital  Color"
 
 echo "set terminal pngcairo size 1024,768 enhanced font 'Helvetica, 35'
 set output '$Title.png'" > $NombreScript
@@ -139,6 +141,7 @@ do
       echo -n " \"${color}\" notitle, " >> $NombreScript
       echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
+      echo  "$l (${tipo})    $(echo $j | cut -d "_" -f 2 )   $color "
    fi
    graf_p=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $5}')
    if [ $graf_p = "T" ]
@@ -151,6 +154,8 @@ do
       echo -n " \"${color}\" notitle, " >> $NombreScript
       echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
+      echo  "$l (${tipo})    $(echo $j | cut -d "_" -f 2 )   $color "
+
    fi
    graf_d=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $6}')
    if [ $graf_d = "T" ]
@@ -163,12 +168,11 @@ do
       echo -n " \"${color}\" notitle, " >> $NombreScript
       echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
+      echo  "$l (${tipo})    $(echo $j | cut -d "_" -f 2 )   $color "
+
    fi
-echo $l  $graf_s $graf_p $graf_d
 
 done 2>/dev/null
 gnuplot $NombreScript
-rm energias_up energias_down elementos procar.down procar.up poscar.xyz
+rm energias_up energias_down elementos procar.down procar.up poscar.xyz energias.up energias.down
 
-echo "Se utilizaron los siguientes colores"
-cat colores

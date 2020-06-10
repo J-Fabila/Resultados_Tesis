@@ -12,7 +12,7 @@ EfermiDown=0
 
 #***************************** GNUPLOT ********************************#
 
-Title=Ir_{2}               #Gnuplot generará un .png llamado 'Title.png'
+Title=Cys-Au-intento               #Gnuplot generará un .png llamado 'Title.png'
                               #La imagen generada tendrá el mismo título
 AutomaticRange=true              #Utiliza el rango automático de gnuplot
                         #Si 'true' entonces se  inhabilita lo siguiente:
@@ -127,29 +127,44 @@ echo -n "plot  " >> $NombreScript
 
 for ((l=1;l<$(($Nat+1));l++))
 do
-
-#   multiplicidad=$( ls $prefix.pdos.pdos_atm#$l\(* | wc -l ) #Cuenta el numero de orbitales tiene el l-esimo atomo
-   for j in _s _p _d
-   do
+   tipo=$( head -$l elementos | tail -1 )
+   graf_s=$() ############################## PENDIENTE
+   if [$graf_s -eq "T" ]
+   then
+      j=_s
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
       filedown=$(ls atomo${l}_orbital*${j}_down.dat)
-#*********************Parser que determina el tipo de Átomo**********************#
-
-      tipo=$( head -$l elementos | tail -1 )
-
-#*********************************************************************#
-#                     Asigna colores                                  #
-#********************************************************************#
       color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
-#**************************** Spin up ************************************#
+      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"${color}\" notitle, " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"$color\" notitle, " >> $NombreScript
+   fi
+   graf_p=$() ################################ PENDIENTE
+   if [$graf_p -eq "T" ]
+   then
+      j=_p
+      fileup=$(ls atomo${l}_orbital*${j}_up.dat)
+      filedown=$(ls atomo${l}_orbital*${j}_down.dat)
+      color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
+      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"${color}\" notitle, " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"$color\" notitle, " >> $NombreScript
+   fi
+   graf_d=$() ################################PENDIENTE
+   if [$graf_d -eq "T" ]
+   then
+      j=_d
+      fileup=$(ls atomo${l}_orbital*${j}_up.dat)
+      filedown=$(ls atomo${l}_orbital*${j}_down.dat)
+      color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
+      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"${color}\" notitle, " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n " \"$color\" notitle, " >> $NombreScript
+   fi
 
-        echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
-        echo -n " \"${color}\" notitle, " >> $NombreScript
-
-#*************************** Spin down ***********************************#
-
-        echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
-        echo -n " \"$color\" notitle, " >> $NombreScript
 
    done
 done 2>/dev/null

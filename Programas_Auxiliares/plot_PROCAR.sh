@@ -128,8 +128,8 @@ echo -n "plot  " >> $NombreScript
 for ((l=1;l<$(($Nat+1));l++))
 do
    tipo=$( head -$l elementos | tail -1 )
-   graf_s=$() ############################## PENDIENTE
-   if [$graf_s -eq "T" ]
+   graf_s=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $4}')
+   if [ $graf_s = "T" ]
    then
       j=_s
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
@@ -140,8 +140,8 @@ do
       echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
-   graf_p=$() ################################ PENDIENTE
-   if [$graf_p -eq "T" ]
+   graf_p=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $5}')
+   if [ $graf_p = "T" ]
    then
       j=_p
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
@@ -152,8 +152,8 @@ do
       echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
-   graf_d=$() ################################PENDIENTE
-   if [$graf_d -eq "T" ]
+   graf_d=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $6}')
+   if [ $graf_d = "T" ]
    then
       j=_d
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
@@ -164,9 +164,8 @@ do
       echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
+echo $l  $graf_s $graf_p $graf_d
 
-
-   done
 done 2>/dev/null
 gnuplot $NombreScript
 rm energias_up energias_down elementos procar.down procar.up poscar.xyz

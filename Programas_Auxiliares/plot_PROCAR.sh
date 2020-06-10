@@ -135,9 +135,9 @@ do
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
       filedown=$(ls atomo${l}_orbital*${j}_down.dat)
       color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
-      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${fileup}\" u 1:2 w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"${color}\" notitle, " >> $NombreScript
-      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
    graf_p=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $5}')
@@ -147,9 +147,9 @@ do
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
       filedown=$(ls atomo${l}_orbital*${j}_down.dat)
       color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
-      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${fileup}\" u 1:2 w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"${color}\" notitle, " >> $NombreScript
-      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
    graf_d=$(grep -A $Nat "Cartesian" POSCAR  | tail -$Nat | head -$l | tail -1 | awk '{print $6}')
@@ -159,9 +159,9 @@ do
       fileup=$(ls atomo${l}_orbital*${j}_up.dat)
       filedown=$(ls atomo${l}_orbital*${j}_down.dat)
       color=$(grep "${tipo}_" colores | grep "$j" | awk '{print $2}')
-      echo -n "\"${fileup}\" u 1:2 w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${fileup}\" u 1:2 w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"${color}\" notitle, " >> $NombreScript
-      echo -n "\"${filedown}\" u 1:2  w filledcurve below lt rgb " >> $NombreScript
+      echo -n "\"${filedown}\" u 1:2  w filledcurve y=0 lt rgb " >> $NombreScript
       echo -n " \"$color\" notitle, " >> $NombreScript
    fi
 echo $l  $graf_s $graf_p $graf_d
